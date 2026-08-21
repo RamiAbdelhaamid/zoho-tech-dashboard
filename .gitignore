@@ -1,0 +1,9 @@
+# Session/harness-internal artifacts — not part of the project.
+.claude/scheduled_tasks.lock
+.claude/*.log
+
+# Stray build/OS artifacts at the repo root, if any.
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
