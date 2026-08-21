@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body { @apply antialiased bg-zinc-100 text-zinc-950 dark:bg-neutral-950 dark:text-zinc-100; }
+  ::selection { @apply bg-cyan-600 text-white; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply rounded-full border-2 border-transparent bg-zinc-300 bg-clip-padding dark:bg-neutral-700; }
+}
+
+@layer components {
+  .app-surface {
+    @apply border border-zinc-200/80 bg-white/90 backdrop-blur dark:border-white/10 dark:bg-neutral-900/80;
+    box-shadow: 0 18px 45px -30px rgb(15 23 42 / 0.35);
+  }
+
+  .soft-panel {
+    @apply rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-neutral-900;
+  }
+
+  .field {
+    @apply rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 dark:border-white/10 dark:bg-neutral-950 dark:text-zinc-100;
+  }
+
+  .icon-button {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 transition hover:border-cyan-300 hover:text-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 dark:border-white/10 dark:bg-neutral-900 dark:text-zinc-300 dark:hover:border-cyan-500/50 dark:hover:text-cyan-300;
+  }
+
+  .primary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-60;
+    box-shadow: 0 18px 50px -32px rgb(14 165 233 / 0.7);
+  }
+
+  .ghost-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:border-cyan-300 hover:text-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-neutral-900 dark:text-zinc-300 dark:hover:border-cyan-500/50 dark:hover:text-cyan-300;
+  }
+}
+
+@layer utilities {
+  .shadow-panel {
+    box-shadow: 0 18px 45px -30px rgb(15 23 42 / 0.35);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 18px 50px -32px rgb(14 165 233 / 0.7);
+  }
+}

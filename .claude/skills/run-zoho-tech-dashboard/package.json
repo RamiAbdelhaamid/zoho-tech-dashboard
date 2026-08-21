@@ -1,0 +1,13 @@
+{
+  "name": "run-zoho-tech-dashboard-skill",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agent tooling only — drives the zoho-tech-dashboard app for verification. Not part of the product.",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.21.0",
+    "playwright": "^1.62.1"
+  }
+}
