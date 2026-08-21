@@ -46,13 +46,11 @@ app.use("/api", ticketsRouter(io));
 getDb()
   .then(() => {
     console.log("[server] connected to MongoDB");
-
-    server.listen(config.port, "0.0.0.0", () => {
-      console.log(`[server] listening on http://0.0.0.0:${config.port}`);
+    server.listen(config.port, () => {
+      console.log(`[server] listening on http://localhost:${config.port}`);
       console.log(
         `[server] watching departments: ${config.zoho.departmentIds.join(", ") || "(none configured)"}`
       );
-
       poller.start(io);
     });
   })
