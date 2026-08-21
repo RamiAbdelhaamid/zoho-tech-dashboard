@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: zoho-tech-dashboard-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      # Non-secret defaults — safe to commit.
+      - key: MONGODB_DB
+        value: zoho_tech_dashboard
+      - key: ZOHO_ACCOUNTS_BASE
+        value: https://accounts.zoho.com
+      - key: ZOHO_API_BASE
+        value: https://desk.zoho.com/api/v1
+      - key: POLL_INTERVAL_MS
+        value: 30000
+      - key: TICKETS_SCAN_LIMIT
+        value: 100
+      - key: RECENT_WAITING_DAYS
+        value: 5
+      # Secrets and deployment-specific values — Render prompts for these
+      # in the dashboard when the Blueprint is applied; never stored here.
+      - key: JWT_SECRET
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: ZOHO_CLIENT_ID
+        sync: false
+      - key: ZOHO_CLIENT_SECRET
+        sync: false
+      - key: ZOHO_REFRESH_TOKEN
+        sync: false
+      - key: ZOHO_ORG_ID
+        sync: false
+      - key: ZOHO_PORTAL_URL
+        sync: false
+      - key: ZOHO_DEPARTMENT_IDS
+        sync: false
+      # Set once the frontend's deployed URL is known — update after both
+      # sides are live (see README's Deploying section).
+      - key: CORS_ORIGIN
+        sync: false
