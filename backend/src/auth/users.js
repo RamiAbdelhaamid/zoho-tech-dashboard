@@ -1,28 +1,20 @@
-// Seed data for the "users" collection in MongoDB Atlas — the live source of
-// truth for login is now the database (see src/auth/usersStore.js), not this
-// file. To add or change an account: generate a bcrypt hash with
-//   node src/auth/hash-password.js "the-password"
-// paste it below, then re-run scripts/migrate-users-to-mongo.js to push the
-// change to Atlas. Never commit real passwords in plaintext.
+// Seed TEMPLATE for the "users" collection in MongoDB Atlas — the live
+// source of truth for login is the database (see src/auth/usersStore.js),
+// not this file. This file is only ever needed for the one-time seed via
+// scripts/migrate-users-to-mongo.js; once accounts exist in Atlas, changing
+// or adding one is just as easily done directly against the "users"
+// collection.
+//
+// Real names/emails/hashes intentionally do NOT live here — this file is
+// committed to the repo, and team-member accounts are internal data that
+// shouldn't be published. To seed your own team:
+//   1. Generate a hash: node src/auth/hash-password.js "the-password"
+//   2. Replace the placeholder entry below locally (don't commit real data)
+//   3. node scripts/migrate-users-to-mongo.js
 module.exports = [
   {
-    username: "osama.dawood@azm.com",
-    name: "Osama Dawood",
-    passwordHash: "$2a$10$Gg9Cg9w073sLoAUr78FA3e5Q13WKdeEWWU4twpTkGCBiP24gxhOqi",
-  },
-  {
-    username: "shehryar.ahmed@azm.com",
-    name: "Shehryar Ahmed",
-    passwordHash: "$2a$10$Gg9Cg9w073sLoAUr78FA3e5Q13WKdeEWWU4twpTkGCBiP24gxhOqi",
-  },
-  {
-    username: "G.AlHendi@azm.com",
-    name: "G. AlHendi",
-    passwordHash: "$2a$10$Gg9Cg9w073sLoAUr78FA3e5Q13WKdeEWWU4twpTkGCBiP24gxhOqi",
-  },
-  {
-    username: "Rami.Abdelhamid@azm.com",
-    name: "Rami Abdelhamid",
-    passwordHash: "$2a$10$Gg9Cg9w073sLoAUr78FA3e5Q13WKdeEWWU4twpTkGCBiP24gxhOqi",
+    username: "tech.name@example.com",
+    name: "Tech Name",
+    passwordHash: "$2a$10$replace.with.a.real.bcrypt.hash.generated.locally",
   },
 ];
