@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   fetchTickets,
   fetchTeamMembers,
@@ -18,8 +18,10 @@ import MyWork from "./components/MyWork.jsx";
 import ActivityFeed from "./components/ActivityFeed.jsx";
 import TicketDrawer from "./components/TicketDrawer.jsx";
 import Login from "./components/Login.jsx";
+import NewTicketToasts from "./components/NewTicketToasts.jsx";
 import { CheckIcon, SearchIcon, SpinnerIcon, TeamIcon, TicketIcon } from "./components/Icons.jsx";
 import { getAllTickets, getTicketById } from "./ticketUtils.js";
+import { playChime, startTitleFlash, stopTitleFlash } from "./notifications.js";
 
 const THEME_KEY = "zoho-tech-dashboard-theme";
 const USER_KEY = "zoho-tech-dashboard-user";
@@ -43,12 +45,38 @@ export default function App() {
   const [pendingIds, setPendingIds] = useState(() => new Set());
   const [selectedTicketId, setSelectedTicketId] = useState(null);
   const [focusDrawerComment, setFocusDrawerComment] = useState(false);
+  const [toasts, setToasts] = useState([]);
+  const seenTicketIdsRef = useRef(null);
+
+  function applyPayload(payload) {
+    const incoming = payload?.tickets || [];
+    if (seenTicketIdsRef.current) {
+      const newTickets = incoming.filter((t) => !seenTicketIdsRef.current.has(t.id));
+      if (newTickets.length > 0) {
+        playChime();
+        setToasts((prev) =>
+          [...prev, ...newTickets.map((t) => ({ key: `${t.id}-${Date.now()}`, id: t.id, num: t.num, subject: t.subject }))].slice(-4)
+        );
+        if (document.hidden) startTitleFlash(newTickets.length);
+      }
+    }
+    seenTicketIdsRef.current = new Set(incoming.map((t) => t.id));
+    setData(payload);
+  }
+
+  useEffect(() => {
+    function onVisibilityChange() {
+      if (!document.hidden) stopTitleFlash();
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, []);
 
   useEffect(() => {
     if (!user) return;
 
     fetchTickets()
-      .then(setData)
+      .then(applyPayload)
       .catch((e) => {
         if (e.unauthorized) handleLogout();
         else setError(e.message);
@@ -61,7 +89,7 @@ export default function App() {
       });
 
     const socket = connectSocket((payload) => {
-      setData(payload);
+      applyPayload(payload);
       setError(null);
     });
     socket.on("connect", () => setConnected(true));
@@ -87,13 +115,20 @@ export default function App() {
     setUser(null);
     setData(null);
     setTeamMembers([]);
+    setToasts([]);
+    seenTicketIdsRef.current = null;
+    stopTitleFlash();
+  }
+
+  function dismissToast(key) {
+    setToasts((prev) => prev.filter((t) => t.key !== key));
   }
 
   async function handleRefresh() {
     setRefreshing(true);
     try {
       const payload = await refreshNow();
-      setData(payload);
+      applyPayload(payload);
       setError(null);
     } catch (e) {
       if (e.unauthorized) handleLogout();
@@ -384,6 +419,11 @@ export default function App() {
         onDeleteComment={handleDeleteComment}
         focusComment={focusDrawerComment}
         pending={selectedTicket ? pendingIds.has(selectedTicket.id) : false}
+      />
+      <NewTicketToasts
+        toasts={toasts}
+        onDismiss={dismissToast}
+        onOpen={(toast) => openTicket({ id: toast.id })}
       />
     </div>
   );
