@@ -39,6 +39,8 @@ io.on("connection", (socket) => {
     .catch((err) => console.error("[socket] failed to load tickets:", err.message));
 });
 
+app.get("/api/health", (req, res) => res.json({ ok: true }));
+
 app.use("/api", authRouter());
 app.use("/api", teamRouter());
 app.use("/api", ticketsRouter(io));

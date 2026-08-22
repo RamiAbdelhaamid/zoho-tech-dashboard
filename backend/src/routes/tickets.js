@@ -47,8 +47,6 @@ function cleanAttachments(input) {
 function ticketsRouter(io) {
   const router = express.Router();
 
-  router.get("/health", (req, res) => res.json({ ok: true }));
-
   router.use(requireAuth);
 
   router.get("/tickets", async (req, res) => {
